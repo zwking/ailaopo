@@ -166,6 +166,25 @@ tr:hover .delete-row {
     padding-right: 30px;
 }
 
+.nav-tabs .nav-link .delete-tab {
+    display: none;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+.nav-tabs .nav-link:hover .delete-tab {
+    display: inline-block;
+}
+
+.nav-tabs .nav-link .delete-tab:hover {
+    color: var(--danger-color);
+}
+
 .table-name {
     outline: none;
     padding: 2px 4px;

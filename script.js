@@ -21,7 +21,7 @@ function initializeChart() {
             console.error('Chart container not found');
             return;
         }
-        if (!myChart && window.echarts) {
+        if (!myChart) {
             myChart = echarts.init(chartDom);
             console.log('Chart initialized successfully');
         }
@@ -138,7 +138,7 @@ document.getElementById('addTable').addEventListener('click', function() {
     tabItem.innerHTML = `
         <button class="nav-link" data-bs-toggle="tab" data-bs-target="#${tableId}" type="button" role="tab" aria-selected="false">
             <span class="table-name" contenteditable="true">表格${tableCounter}</span>
-            <i class="fas fa-times ms-2 delete-tab" style="display: none;"></i>
+            <i class="fas fa-times ms-2 delete-tab"></i>
         </button>
     `;
     
@@ -845,12 +845,21 @@ function generateChartOption(type, data, isComparison = false) {
 
 // 生成单个表格的图表
 document.getElementById('generateChart').addEventListener('click', function() {
-    const activeTableId = document.querySelector('.tab-pane.active').id;
-    const data = getTableData(activeTableId);
-    tables.get(activeTableId).data = data; // 保存数据
-    
-    const option = generateChartOption(chartType.value, data);
-    myChart.setOption(option, true);
+    try {
+        const activeTableId = document.querySelector('.tab-pane.active').id;
+        const data = getTableData(activeTableId);
+        tables.get(activeTableId).data = data; // 保存数据
+        
+        if (!myChart) {
+            initializeChart();
+        }
+        
+        const option = generateChartOption(document.getElementById('chartType').value, data);
+        myChart.setOption(option, true);
+    } catch (error) {
+        console.error('Error generating chart:', error);
+        alert('生成图表时发生错误，请检查数据是否正确填写');
+    }
 });
 
 // 数据对比
