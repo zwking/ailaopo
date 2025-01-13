@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自定义图表生成器</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="control-panel">
+            <h2>控制面板</h2>
+            <div class="section">
+                <label>图表类型：</label>
+                <select id="chartType">
+                    <option value="line">折线图</option>
+                    <option value="bar">柱状图</option>
+                    <option value="pie">饼图</option>
+                    <option value="scatter">散点图</option>
+                </select>
+            </div>
+            
+            <div class="section">
+                <label>数据输入：</label>
+                <textarea id="dataInput" placeholder="请输入数据，每行一组，格式：名称,数值&#10;例如：&#10;一月,100&#10;二月,150"></textarea>
+            </div>
+
+            <div class="section axis-settings">
+                <h3>坐标轴设置</h3>
+                <div>
+                    <label>X轴标题：</label>
+                    <input type="text" id="xAxisTitle" placeholder="X轴标题">
+                </div>
+                <div>
+                    <label>Y轴标题：</label>
+                    <input type="text" id="yAxisTitle" placeholder="Y轴标题">
+                </div>
+            </div>
+
+            <div class="section color-settings">
+                <h3>颜色设置</h3>
+                <div>
+                    <label>主要颜色：</label>
+                    <input type="color" id="mainColor" value="#5470c6">
+                </div>
+            </div>
+
+            <button id="generateChart">生成图表</button>
+        </div>
+        
+        <div class="chart-container">
+            <div id="chartArea"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
