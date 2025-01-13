@@ -1,6 +1,24 @@
+// 错误处理
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + JSON.stringify(error));
+    return false;
+};
+
 // 初始化ECharts实例
-const chartDom = document.getElementById('chartArea');
-const myChart = echarts.init(chartDom);
+document.addEventListener('DOMContentLoaded', function() {
+    try {
+        const chartDom = document.getElementById('chartArea');
+        if (!chartDom) {
+            console.error('Chart container not found');
+            return;
+        }
+        const myChart = echarts.init(chartDom);
+        
+        // ... rest of your code ...
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
+});
 
 // 全局变量
 let tableCounter = 1; // 用于生成唯一的表格ID
