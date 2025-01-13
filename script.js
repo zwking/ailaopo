@@ -4,31 +4,121 @@ window.onerror = function(msg, url, lineNo, columnNo, error) {
     return false;
 };
 
-// 初始化ECharts实例
-document.addEventListener('DOMContentLoaded', function() {
+// 全局变量
+let tableCounter = 1;
+let myChart = null;
+const tables = new Map();
+const defaultColors = [
+    '#5470c6', '#91cc75', '#fac858', '#ee6666',
+    '#73c0de', '#3ba272', '#fc8452', '#9a60b4'
+];
+
+// 初始化图表
+function initializeChart() {
     try {
         const chartDom = document.getElementById('chartArea');
         if (!chartDom) {
             console.error('Chart container not found');
             return;
         }
-        const myChart = echarts.init(chartDom);
-        
-        // ... rest of your code ...
+        if (!myChart && window.echarts) {
+            myChart = echarts.init(chartDom);
+            console.log('Chart initialized successfully');
+        }
     } catch (error) {
-        console.error('Initialization error:', error);
+        console.error('Error initializing chart:', error);
     }
+}
+
+// 确保在 DOM 和所有资源加载完成后初始化
+window.addEventListener('load', function() {
+    // 初始化第一个表格数据
+    tables.set('table1', {
+        colors: [...defaultColors],
+        data: null
+    });
+
+    // 初始化图表
+    initializeChart();
+
+    // 初始化事件监听
+    initEventListeners();
 });
 
-// 全局变量
-let tableCounter = 1; // 用于生成唯一的表格ID
-const tables = new Map(); // 存储所有表格的数据
+// 集中管理事件监听
+function initEventListeners() {
+    try {
+        // 添加表格按钮
+        const addTableBtn = document.getElementById('addTable');
+        if (addTableBtn) {
+            addTableBtn.addEventListener('click', handleAddTable);
+        }
+        
+        // 生成图表按钮
+        const generateChartBtn = document.getElementById('generateChart');
+        if (generateChartBtn) {
+            generateChartBtn.addEventListener('click', handleGenerateChart);
+        }
+        
+        // 数据对比按钮
+        const compareChartsBtn = document.getElementById('compareCharts');
+        if (compareChartsBtn) {
+            compareChartsBtn.addEventListener('click', handleCompareCharts);
+        }
+        
+        // 主题切换
+        const themeSelect = document.getElementById('themeSelect');
+        if (themeSelect) {
+            themeSelect.addEventListener('change', handleThemeChange);
+        }
+        
+        // 窗口大小改变
+        window.addEventListener('resize', debounce(() => {
+            if (myChart) {
+                myChart.resize();
+            }
+        }, 250));
 
-// 默认颜色配置
-const defaultColors = [
-    '#5470c6', '#91cc75', '#fac858', '#ee6666',
-    '#73c0de', '#3ba272', '#fc8452', '#9a60b4'
-];
+        // 初始化第一个表格的事件
+        initTableEvents('table1');
+    } catch (error) {
+        console.error('Error initializing event listeners:', error);
+    }
+}
+
+// 处理生成图表事件
+function handleGenerateChart() {
+    try {
+        const activeTableId = document.querySelector('.tab-pane.active').id;
+        const data = getTableData(activeTableId);
+        tables.get(activeTableId).data = data;
+        
+        if (!myChart) {
+            console.error('Chart not initialized');
+            initializeChart();
+        }
+        
+        if (myChart) {
+            const option = generateChartOption(document.getElementById('chartType').value, data);
+            myChart.setOption(option, true);
+        }
+    } catch (error) {
+        console.error('Error generating chart:', error);
+    }
+}
+
+// 防抖函数
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
 
 // 初始化第一个表格
 tables.set('table1', {

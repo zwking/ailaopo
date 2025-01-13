@@ -1,26 +1,24 @@
+/* 基础样式 */
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --danger-color: #dc3545;
+    --success-color: #198754;
+    --light-bg: #f8f9fa;
+    --border-color: #dee2e6;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    background-color: #f8f9fa;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-.container {
-    display: flex;
-    gap: 20px;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
+/* 布局样式 */
 .control-panel {
     padding: 20px;
-    background-color: #f8f9fa;
-    border-right: 1px solid #dee2e6;
+    background-color: var(--light-bg);
+    border-right: 1px solid var(--border-color);
     height: 100vh;
     overflow-y: auto;
 }
@@ -33,97 +31,9 @@ body {
 #chartArea {
     width: 100%;
     height: 100%;
-}
-
-.section {
-    margin-bottom: 20px;
-}
-
-h2 {
-    margin-bottom: 20px;
-    color: #333;
-}
-
-h3 {
-    margin-bottom: 10px;
-    color: #666;
-    font-size: 16px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-select, input, textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
-
-textarea {
-    height: 100px;
-    resize: vertical;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-input[type="color"] {
-    height: 40px;
-    padding: 2px;
-}
-
-.card {
-    border: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.card-title {
-    color: #495057;
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-.form-label {
-    color: #6c757d;
-    font-weight: 500;
-}
-
-.btn-primary {
-    background-color: #0d6efd;
-    border: none;
-    padding: 10px 20px;
-}
-
-.btn-primary:hover {
-    background-color: #0b5ed7;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border: none;
-}
-
-.btn-secondary:hover {
-    background-color: #5c636a;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 /* 表格样式 */
@@ -131,7 +41,8 @@ input[type="color"] {
     margin-bottom: 0;
 }
 
-.table th, .table td {
+.table th,
+.table td {
     padding: 0.5rem;
     vertical-align: middle;
 }
@@ -140,11 +51,17 @@ input[type="color"] {
     width: 200px;
 }
 
-.add-column-header, .add-column-cell {
+.add-column-header,
+.add-column-cell {
     width: 40px;
     padding: 0 !important;
-    vertical-align: middle;
     text-align: center;
+}
+
+/* 输入框样式 */
+.form-control-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
 }
 
 .month-input {
@@ -152,26 +69,26 @@ input[type="color"] {
     display: inline-block;
 }
 
-.add-column {
-    color: #0d6efd;
+/* 按钮样式 */
+.btn-link {
+    text-decoration: none;
     padding: 0.25rem;
-    width: 100%;
 }
 
-.add-column:hover {
-    color: #0a58ca;
-}
-
-/* 删除按钮样式 */
 .delete-column,
 .delete-row {
-    padding: 0 !important;
+    visibility: hidden;
     width: 24px;
     height: 24px;
     min-width: 24px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+tr:hover .delete-column,
+tr:hover .delete-row {
+    visibility: visible;
 }
 
 .delete-column i,
@@ -182,13 +99,7 @@ input[type="color"] {
 
 .delete-column:hover i,
 .delete-row:hover i {
-    color: #dc3545;
-}
-
-/* 输入框样式 */
-.form-control-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
+    color: var(--danger-color);
 }
 
 /* 颜色选择器样式 */
@@ -201,38 +112,10 @@ input[type="color"] {
     cursor: pointer;
 }
 
-.color-picker::-webkit-color-swatch {
-    border-radius: 2px;
-    border: none;
-}
-
+.color-picker::-webkit-color-swatch,
 .color-picker::-moz-color-swatch {
     border-radius: 2px;
     border: none;
-}
-
-/* 按钮样式 */
-.btn-primary {
-    background-color: #0d6efd;
-    border: none;
-    padding: 10px 20px;
-}
-
-.btn-primary:hover {
-    background-color: #0b5ed7;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    border: none;
-}
-
-.btn-secondary:hover {
-    background-color: #5c636a;
-}
-
-.btn-link {
-    text-decoration: none;
 }
 
 /* 主题样式 */
@@ -241,11 +124,7 @@ input[type="color"] {
     color: #fff;
 }
 
-.theme-dark .control-panel {
-    background-color: #343a40;
-    border-color: #495057;
-}
-
+.theme-dark .control-panel,
 .theme-dark .card {
     background-color: #343a40;
     border-color: #495057;
@@ -275,11 +154,7 @@ input[type="color"] {
     background-color: #f8f4e8;
 }
 
-.theme-vintage .card {
-    background-color: #fff9eb;
-    border-color: #d4c9a8;
-}
-
+.theme-vintage .card,
 .theme-vintage .form-control {
     background-color: #fff9eb;
     border-color: #d4c9a8;
@@ -291,39 +166,6 @@ input[type="color"] {
     padding-right: 30px;
 }
 
-.delete-tab {
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 12px;
-    cursor: pointer;
-    opacity: 0.5;
-}
-
-.delete-tab:hover {
-    opacity: 1;
-    color: #dc3545;
-}
-
-.nav-tabs .nav-link.active .delete-tab {
-    display: inline-block !important;
-}
-
-/* 表格切换动画 */
-.tab-pane {
-    transition: opacity 0.3s ease-in-out;
-}
-
-.tab-pane.fade {
-    opacity: 0;
-}
-
-.tab-pane.fade.show {
-    opacity: 1;
-}
-
-/* 表格名称编辑样式 */
 .table-name {
     outline: none;
     padding: 2px 4px;
@@ -341,88 +183,15 @@ input[type="color"] {
     color: #999;
 }
 
-/* 删除按钮样式 */
-.delete-tab {
-    cursor: pointer;
+/* 动画效果 */
+.tab-pane {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tab-pane.fade {
     opacity: 0;
-    transition: opacity 0.2s;
 }
 
-.nav-link:hover .delete-tab {
+.tab-pane.fade.show {
     opacity: 1;
-    display: inline-block !important;
-}
-
-/* 表格样式 */
-.data-table th,
-.data-table td {
-    padding: 0.5rem;
-}
-
-.type-column {
-    width: 200px;
-}
-
-.add-column-header {
-    width: 40px;
-}
-
-/* 颜色选择器样式 */
-.color-picker {
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-/* 主题样式 */
-.theme-dark {
-    background-color: #212529;
-    color: #fff;
-}
-
-.theme-dark .control-panel {
-    background-color: #343a40;
-    border-color: #495057;
-}
-
-.theme-dark .card {
-    background-color: #343a40;
-    border-color: #495057;
-}
-
-.theme-dark .form-control {
-    background-color: #495057;
-    border-color: #6c757d;
-    color: #fff;
-}
-
-.theme-dark .nav-tabs {
-    border-color: #495057;
-}
-
-.theme-dark .nav-tabs .nav-link.active {
-    background-color: #343a40;
-    border-color: #495057;
-    color: #fff;
-}
-
-.theme-vintage {
-    background-color: #f4ecd8;
-}
-
-.theme-vintage .control-panel {
-    background-color: #f8f4e8;
-}
-
-.theme-vintage .card {
-    background-color: #fff9eb;
-    border-color: #d4c9a8;
-}
-
-.theme-vintage .form-control {
-    background-color: #fff9eb;
-    border-color: #d4c9a8;
 } 
