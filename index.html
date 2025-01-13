@@ -3,56 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>自定义图表生成器</title>
+    <title>招聘数据可视化工具</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="control-panel">
-            <h2>控制面板</h2>
-            <div class="section">
-                <label>图表类型：</label>
-                <select id="chartType">
-                    <option value="line">折线图</option>
-                    <option value="bar">柱状图</option>
-                    <option value="pie">饼图</option>
-                    <option value="scatter">散点图</option>
-                </select>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-5 control-panel">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">招聘数据可视化</h2>
+                    <button class="btn btn-outline-primary" id="addTable">
+                        <i class="fas fa-plus"></i> 新建表格
+                    </button>
+                </div>
+                
+                <!-- 表格切换标签 -->
+                <ul class="nav nav-tabs mb-3" id="tableTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#table1" type="button" role="tab" aria-selected="true">
+                            <span class="table-name" contenteditable="true">表格1</span>
+                            <i class="fas fa-times ms-2 delete-tab" style="display: none;"></i>
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- 表格内容区域 -->
+                <div class="tab-content" id="tableContents">
+                    <div class="tab-pane fade show active" id="table1" role="tabpanel" tabindex="0">
+                        <!-- 动态表格输入区域 -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">数据输入</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered data-table" id="dataTable1">
+                                        <thead>
+                                            <tr id="headerRow1">
+                                                <th class="type-column">类型/月份</th>
+                                                <th>
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="text" class="form-control form-control-sm month-input" value="1月">
+                                                        <button class="btn btn-sm btn-link delete-column p-0">
+                                                            <i class="fas fa-times text-danger"></i>
+                                                        </button>
+                                                    </div>
+                                                </th>
+                                                <th class="add-column-header">
+                                                    <button class="btn btn-sm btn-link add-column">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="text" class="form-control form-control-sm" value="深空入职数">
+                                                        <button class="btn btn-sm btn-link delete-row p-0">
+                                                            <i class="fas fa-times text-danger"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" value="0">
+                                                </td>
+                                                <td class="add-column-cell"></td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="100%">
+                                                    <button class="btn btn-sm btn-secondary w-100 add-row">
+                                                        <i class="fas fa-plus"></i> 添加新行
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表设置区域 -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">图表设置</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">图表类型</label>
+                                <select id="chartType" class="form-select">
+                                    <option value="line">折线图</option>
+                                    <option value="bar">柱状图</option>
+                                    <option value="stackBar">堆叠柱状图</option>
+                                    <option value="multiLine">多线图</option>
+                                    <option value="area">面积图</option>
+                                    <option value="stackArea">堆叠面积图</option>
+                                    <option value="scatter">散点图</option>
+                                    <option value="radar">雷达图</option>
+                                    <option value="pie">饼图</option>
+                                    <option value="nightingale">南丁格尔玫瑰图</option>
+                                    <option value="gauge">仪表盘</option>
+                                    <option value="funnel">漏斗图</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">主题风格</label>
+                                <select id="themeSelect" class="form-select">
+                                    <option value="default">默认主题</option>
+                                    <option value="dark">深色主题</option>
+                                    <option value="vintage">复古主题</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">X轴标题</label>
+                                <input type="text" id="xAxisTitle" class="form-control" value="月份">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Y轴标题</label>
+                                <input type="text" id="yAxisTitle" class="form-control" value="人数">
+                            </div>
+                        </div>
+
+                        <div class="row" id="colorPickers">
+                            <div class="col-12">
+                                <label class="form-label">数据系列颜色</label>
+                                <div class="d-flex flex-wrap gap-2" id="seriesColors">
+                                    <!-- 颜色选择器将通过JS动态添加 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button id="generateChart" class="btn btn-primary flex-grow-1">生成图表</button>
+                    <button id="compareCharts" class="btn btn-success" title="对比所选表格数据">
+                        <i class="fas fa-chart-line"></i> 数据对比
+                    </button>
+                </div>
             </div>
             
-            <div class="section">
-                <label>数据输入：</label>
-                <textarea id="dataInput" placeholder="请输入数据，每行一组，格式：名称,数值&#10;例如：&#10;一月,100&#10;二月,150"></textarea>
-            </div>
-
-            <div class="section axis-settings">
-                <h3>坐标轴设置</h3>
-                <div>
-                    <label>X轴标题：</label>
-                    <input type="text" id="xAxisTitle" placeholder="X轴标题">
-                </div>
-                <div>
-                    <label>Y轴标题：</label>
-                    <input type="text" id="yAxisTitle" placeholder="Y轴标题">
+            <div class="col-md-7">
+                <div class="chart-container">
+                    <div id="chartArea"></div>
                 </div>
             </div>
-
-            <div class="section color-settings">
-                <h3>颜色设置</h3>
-                <div>
-                    <label>主要颜色：</label>
-                    <input type="color" id="mainColor" value="#5470c6">
-                </div>
-            </div>
-
-            <button id="generateChart">生成图表</button>
-        </div>
-        
-        <div class="chart-container">
-            <div id="chartArea"></div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 
