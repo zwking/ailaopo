@@ -5,35 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>招聘数据可视化工具</title>
     
-    <!-- 关键 CSS 内联加载 -->
-    <style>
-        /* 添加关键渲染路径的基础样式 */
-        .control-panel {
-            padding: 20px;
-        }
-        .chart-container {
-            height: 100vh;
-            padding: 20px;
-        }
-    </style>
-    
-    <!-- CSS 资源 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 优先加载核心样式 -->
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     
-    <!-- 预加载 ECharts -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- 异步加载非关键资源 -->
+    <link rel="preload" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+    
+    <!-- 内联关键CSS -->
+    <style>
+        /* Split.js 相关样式 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .split {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100vh;
+        }
+
+        /* 初始宽度设置 */
+        #leftPanel {
+            width: calc(60% - 5px);
+        }
+
+        #rightPanel {
+            width: calc(40% - 5px);
+        }
+        
+        .gutter {
+            background-color: #eee;
+            background-repeat: no-repeat;
+            background-position: 50%;
+            cursor: col-resize;
+            transition: background-color 0.15s ease;
+        }
+
+        .gutter:hover {
+            background-color: #ddd;
+        }
+
+        .gutter.gutter-horizontal {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+            width: 10px;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .split-panel {
+            overflow-y: auto;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        /* 调整原有样式 */
+        .control-panel { 
+            height: 100%;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .chart-container { 
+            height: 100%;
+            padding: 20px;
+        }
+
+        #chartArea {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* 按钮样式修复 */
+        .btn-outline-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .table .btn-link {
+            padding: 4px;
+            line-height: 1;
+        }
+    </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-5 control-panel">
+    <div class="split">
+        <div class="split-panel" id="leftPanel">
+            <div class="control-panel">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="mb-0">招聘数据可视化</h2>
-                    <button class="btn btn-outline-primary" id="addTable">
-                        <i class="fas fa-plus"></i> 新建表格
-                    </button>
+                    <button class="btn btn-secondary" id="addTable">新建表格</button>
                 </div>
                 
                 <!-- 表格切换标签 -->
@@ -67,9 +140,7 @@
                                                     </div>
                                                 </th>
                                                 <th class="add-column-header">
-                                                    <button class="btn btn-sm btn-link add-column">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
+                                                    <button class="btn btn-sm btn-secondary w-100 add-column">添加新列</button>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -92,9 +163,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="100%">
-                                                    <button class="btn btn-sm btn-secondary w-100 add-row">
-                                                        <i class="fas fa-plus"></i> 添加新行
-                                                    </button>
+                                                    <button class="btn btn-secondary w-100 add-row">添加新行</button>
                                                 </td>
                                             </tr>
                                         </tfoot>
@@ -166,31 +235,97 @@
                     </button>
                 </div>
             </div>
-            
-            <div class="col-md-7">
-                <div class="chart-container">
-                    <div id="chartArea"></div>
-                </div>
+        </div>
+        <div class="split-panel" id="rightPanel">
+            <div class="chart-container">
+                <div id="chartArea"></div>
             </div>
         </div>
     </div>
-    <!-- 修改脚本加载顺序 -->
-    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js" defer></script>
-    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js" defer></script>
-    <!-- 按需加载 ECharts -->
+
+    <!-- 优化脚本加载顺序 -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/split.js/1.6.5/split.min.js"></script>
+    
+    <!-- 异步加载图表资源 -->
     <script>
-        // 延迟加载 ECharts
-        document.getElementById('generateChart').addEventListener('click', function() {
-            if (!window.echarts) {
+        // 初始化 Split.js（移到最前面，确保最早执行）
+        const initSplit = () => {
+            const split = Split(['#leftPanel', '#rightPanel'], {
+                sizes: [60, 40],
+                minSize: [400, 300],
+                gutterSize: 10,
+                snapOffset: 0,
+                dragInterval: 1,
+                onDrag: function() {
+                    if (window.myChart) {
+                        window.myChart.resize();
+                    }
+                },
+                onDragEnd: function() {
+                    if (window.myChart) {
+                        window.myChart.resize();
+                    }
+                }
+            });
+
+            // 立即触发一次resize以确保正确的初始布局
+            if (window.myChart) {
+                window.myChart.resize();
+            }
+
+            return split;
+        };
+
+        // 立即初始化 Split.js
+        let splitInstance = initSplit();
+
+        // 异步加载 ECharts
+        function loadECharts() {
+            return new Promise((resolve, reject) => {
                 const script = document.createElement('script');
-                script.src = 'https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/echarts/5.4.3/echarts.min.js';
-                script.onload = initChart;
+                script.src = 'https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js';
+                script.onload = resolve;
+                script.onerror = reject;
                 document.body.appendChild(script);
-            } else {
-                initChart();
+            });
+        }
+
+        // 异步加载主程序
+        function loadMainScript() {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'script.js';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.body.appendChild(script);
+            });
+        }
+
+        // 按顺序加载资源
+        async function initializeApp() {
+            try {
+                await loadECharts();
+                await loadMainScript();
+                // 重新调整图表大小
+                if (window.myChart) {
+                    window.myChart.resize();
+                }
+            } catch (error) {
+                console.error('资源加载失败:', error);
+            }
+        }
+
+        // 开始加载
+        initializeApp();
+
+        // 监听窗口大小变化，调整图表大小
+        window.addEventListener('resize', () => {
+            if (window.myChart) {
+                window.myChart.resize();
             }
         });
     </script>
-    <script src="script.js" defer></script>
 </body>
 </html> 

@@ -51,11 +51,13 @@
     width: 200px;
 }
 
-.add-column-header,
+.add-column-header {
+    width: 100px;
+    padding: 0.5rem !important;
+}
+
 .add-column-cell {
-    width: 40px;
-    padding: 0 !important;
-    text-align: center;
+    width: 100px;
 }
 
 /* 输入框样式 */
@@ -213,4 +215,22 @@ tr:hover .delete-row {
 
 .tab-pane.fade.show {
     opacity: 1;
+}
+
+/* 按钮样式优化 */
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.add-column,
+.add-row {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
 } 
